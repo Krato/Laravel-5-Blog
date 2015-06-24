@@ -1,0 +1,32 @@
+
+
+.checkbox:hover > .cat-options{
+	display:block;
+}
+
+.cat-options{
+	display:none;
+}
+
+.right-panel-options{
+	font-size: 12px;
+	font-weight: 400;
+	padding: 2px 5px;
+	color:white;
+}
+
+.right-panel-options:hover{
+	color:white;
+}
+
+.green{
+	background-color: #00CEA0;
+}
+
+.red{
+	background-color: #F13D5B;
+}
+
+li.active{
+	font-weight: bold;
+}

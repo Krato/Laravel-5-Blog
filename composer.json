@@ -1,0 +1,29 @@
+{
+    "name": "newbranding/blog",
+    "description": "Blog for Laravel 5",
+    "keywords": ["laravel","laravel 5","blog"],
+    "require": {
+        "php": ">=5.4.0",
+        "laravel/framework": "5.0.*",
+        "vinkla/translator": "^2.2",
+        "mcamara/laravel-localization": "1.0.*",
+        "cviebrock/eloquent-sluggable": ">=3.0.0-alpha",
+        "yajra/laravel-datatables-oracle": "~5.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eric Lagarda",
+            "email": "eric@newbrander.es"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "src/commands"
+        ],
+        "psr-4": {
+            "NewBranding\\Blog\\": "src/NewBranding/"
+        }
+    },
+    "minimum-stability": "dev"
+}
