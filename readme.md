@@ -2,6 +2,15 @@
 
 Custom Blog Package for Laravel 5
 
+## Requirements
+
+**Vinkia: Translator**: https://github.com/vinkla/translator
+**Mcamara Laravel Localization**: https://github.com/mcamara/laravel-localization
+**Cviebrock Eloquent-Sluggable**: https://github.com/cviebrock/eloquent-sluggable
+**Yajra Laravel Datatables**: http://yajra.github.io/laravel-datatables/
+
+All the packages will be installed automatically if you don't have it.
+
 
 ## Instructions
 
@@ -14,7 +23,7 @@ Folder Structure:
         -Models
 ```
 
-## Publish configuration
+## Publish configuration and Public Files
 
 First, you need to publish the configuration file. This, will create a *blog.php* in your config folder. Publish the configuration with next command:
 `php artisan vendor:publish`
@@ -41,11 +50,13 @@ You should create the models with the following command:
 You should create the controllers with the following command:
 `php artisan newbranding:blog controllers`. This will generate all the  Controllers in the folders with your custom names. We can use it inside the pacakage because you can create dynamic modules
 
+## Creating Requests
+
+You should create the requests files with the following command:
+`php artisan newbranding:blog requests`. This will create all Requests needed for the package.
 
 
-##Links
+##ToDo
+*Add a better readme
 
-Please add the links to bring the blog up. 
-* Item 123456
-* * Item 
     
