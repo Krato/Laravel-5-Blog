@@ -84,4 +84,19 @@ class {{ ucfirst($postsTable) }} extends Model implements TranslatableContract {
         return $this->belongsToMany('{{$app_name}}{{$blog_path}}\Models\{{ ucfirst($tagsTable) }}', '{{$pivotTagsTable}}', '{{ $postsTable }}_id', '{{ $tagsTable }}_id')->withTrashed();
     }
 
+	/**
+	 * Generates Feature image for post
+	 * @return  Eloquent
+	 */
+	public function getFeaturedImage()
+    {
+    	
+    	if($this->featured_image){
+    		$image =  asset('blog_assets/uploads/'.date('m-Y', strtotime($this->publish_date))."/1920/".$this->featured_image);
+    	} else {
+    		$image = asset('blog_assets/no-image.jpg');
+    	}
+        
+        return $image;
+    }
 }

@@ -3,7 +3,7 @@
 <link type="text/css" rel="stylesheet" href="{{ asset('/admin/assets/plugins/jquery-datatable/media/css/jquery.dataTables.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('/admin/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css') }}">
 <link media="screen" type="text/css" rel="stylesheet" href="{{ asset('/admin/assets/plugins/datatables-responsive/css/datatables.responsive.css') }}">
-<link type="text/css" rel="stylesheet" href="{{ asset('/blog/css/blog.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ asset('/blog_assets/css/blog.css') }}">
 @endsection
 @section('breadcum')
 <ul class="breadcrumb">

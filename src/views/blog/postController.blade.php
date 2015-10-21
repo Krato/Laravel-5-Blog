@@ -110,6 +110,12 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
         return view('blog::admin.index', compact('all', 'published', 'trash'));
 
 	}
+
+    public function index_front(){
+        $posts = $this->post->where('state', 1)->paginate(12);
+        $categories = $this->categories->get();
+        return view('blog::front.home', compact('posts', 'categories'));
+    }
 	
 	/**
 	 * Get te list of post in Datatable view
@@ -140,7 +146,7 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
 
         return Datatables::of($data)
         ->editColumn('photo', function($info) {
-            $image = asset('blog/uploads/'.date('m-Y', strtotime($info->publish_date))."/".Config::get('blog.thumbnail_folder').'/'.$info->featured_image);
+            $image = asset('blog_assets/uploads/'.date('m-Y', strtotime($info->publish_date))."/".Config::get('blog.thumbnail_folder').'/'.$info->featured_image);
             return '<img src="'.$image.'" class="img-thumbnail" alt="'.$info->getTitle().'">';
         })
         ->addColumn('title', '')
@@ -220,7 +226,9 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+		$trans = $this->post->translate(Config::get('app.locale'))->findBySlug($slug);
+        $post = $this->post->find($trans->post_id);
+        return view('blog::front.single', compact('post'));
 	}
 
 	/**
@@ -264,6 +272,11 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
         }
     }
 
+    
+    /**
+     * Save new post or update current
+     * @return BOOL or Post->Id
+     */
 	private function storeOrUpdatePost()
     {
         $upload_image = true;
@@ -295,7 +308,6 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
                     return redirect()->back()->withInput();
                 } 
             }
-              
 
             $imagen = $this->uploadImage();
             $post->featured_image = $imagen;
@@ -316,7 +328,10 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
        
     }
 
-
+    /**
+     * Saves or updates tags
+     * @return array
+     */
     private function storeOrUpdateTags(){
 
         $tagArray = array();
@@ -336,58 +351,99 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
     }
 
 
-    private function uploadImage(){
+    /**
+     * Function to handle image editor uploads
+     * @param  Request $request file
+     * @return JSON
+     */
+    public function upload_image_editor(Request $request){
+        
+        $this->image = $request->file('file');
+        $this->data["publish_date"] = date("Y-m-d H:i:s");
+        $file = $this->uploadImage(true);
+        $folder = date('m-Y', strtotime($this->data["publish_date"]));
+        $destination = url().'/blog_assets/uploads/'.$folder."/1920/";
+        return json_encode( ['filelink'=> $destination. $file, 'name' => $file, 'folder' => $folder]);
+    }
 
+    /**
+     * Uploads Images to folders with 
+     * year and month folders
+     * @param  boolean $redimension
+     * @return string  Name of file
+     */
+    private function uploadImage($redimension = true){
         $file = $this->image;
-        if(!$file){
-            return redirect()->back()->withInput(); 
+        if(!isset($this->image)){
+            return redirect()->back()->withInput();
         }
         $filename = pathinfo(str_replace(" ", "_",$file->getClientOriginalName()), PATHINFO_FILENAME)."_".str_random(5);
         $filenameWithExt = $filename.".". $file->getClientOriginalExtension();
 
         $correctDate = str_replace('/', '-', $this->data["publish_date"]);
 
-        $destination = public_path().'/blog/uploads/'.date('m-Y', strtotime($correctDate))."/";
+        $destination_original = public_path().'/blog_assets/uploads/original/';
+        $destination = public_path().'/blog_assets/uploads/'.date('m-Y', strtotime($correctDate))."/";
 
         //dd($destination);
+        if (! file_exists($destination_original)) {
+            mkdir($destination_original, 0777, true);
+        }
         if (! file_exists($destination)) {
             mkdir($destination, 0777, true);
         }
 
-        $file->move($destination, $filenameWithExt);
+        $file->move($destination_original, $filenameWithExt);
 
-        $img = Image::make($destination.$filenameWithExt);
+    
 
-        $dimensions = $img->width()."x".$img->height();
+        if($redimension){
+            $img = Image::make($destination_original.$filenameWithExt);
+            $dimensions = $img->width()."x".$img->height();
+            $img->backup();
+            $formats =  app('config')->get('blog.image_formats');
+            $imagen_backup = false;
+            foreach($formats as $name => $format){
+                if(!$imagen_backup){
+                    $new_image = $img->reset();
+                } else {
+                    $new_image = $imagen_backup->reset();
+                }
+                if (! file_exists($destination.$name."/")) {
+                    mkdir($destination.$name."/", 0777, true);
+                }
 
-        $img->backup();
-        $formats =  app('config')->get('blog.image_formats');
-        foreach($formats as $name => $format){
-
-            if (! file_exists($destination.$name."/")) {
-                mkdir($destination.$name."/", 0777, true);
+                $new_image = $img->reset();
+                switch ($format['a']) {
+                    case 0:
+                        $new_image->resize(
+                            $format['w'],$format['h'],function($constraint){
+                                $constraint->aspectRatio();
+                            }
+                        );
+                        break;
+                    case 1:
+                        $new_image->fit($format['w'],$format['h']);
+                        break;
+                }
+                $new_image->save($destination.$name.'/'.$filenameWithExt);
+                if($name == '1920'){
+                    $imagen_backup = $new_image->backup();
+                }
             }
-
-            $new_image = $img->reset();
-            switch ($format['a']) {
-                case 0:
-                    $new_image->resize(
-                        $format['w'],$format['h'],function($constraint){
-                            $constraint->aspectRatio();
-                        }
-                    );
-                    break;
-                case 1:
-                    $new_image->fit($format['w'],$format['h']);
-                    break;
-            }
-
-            $new_image->save($destination.$name.'/'.$filenameWithExt);
+            $img->destroy();
+            //borramos la imagen original
+            @unlink($destination_original.$filenameWithExt);
         }
-        return $filenameWithExt;
 
+        return $filenameWithExt;
     }
 
+    /**
+     * Remove Featured Image
+     * @param  var $image image file
+     * @return BOOL
+     */
     private function removeImages($image){
         if (strpos($image,'http') !== false) {
             return true;
@@ -395,7 +451,7 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
         $correctDate = str_replace('/', '-', $this->data["publish_date"]);
         $time_folder = date('m-Y', strtotime($correctDate));
         $formats =  app('config')->get('blog.image_formats');
-        $destination = public_path().'/blog/uploads/'.$time_folder."/";
+        $destination = public_path().'/blog_assets/uploads/'.$time_folder."/";
         $error = false;
         foreach($formats as $name => $format){
             if(unlink($destination.$name.'/'.$image) == false){
@@ -411,6 +467,38 @@ class {{ ucfirst($postsTable) }}Controller extends Controller {
             return false;
         } else {
             return true;
+        }
+    }
+
+    /**
+     * Function to handle image editor uploads
+     * @param  Request $request file
+     * @return JSON
+     */
+    public function upload_image_editor(Request $request){
+        
+        $this->image = $request->file('file');
+        $this->data["publish_date"] = date("Y-m-d H:i:s");
+        $file = $this->uploadImage(false);
+        $folder = date('m-Y', strtotime($this->data["publish_date"]));
+        $destination = url().'/blog_assets/uploads/'.$folder."/";
+
+        return json_encode( ['filelink'=> $destination. $file, 'name' => $file, 'folder' => $folder]);
+        return false;
+    }
+
+    /**
+     * Remove editor image from folder
+     * @param  Request $request
+     * @return BOOL
+     */
+    public function remove_editor_images(Request $request){
+        $name = $request["name"];
+        $folder = $request["folder"];
+        if(@unlink(public_path().'/blog_assets/uploads/'.$folder."/".$name)){
+            return json_encode(true);
+        } else {
+            return json_encode(false);
         }
     }
 

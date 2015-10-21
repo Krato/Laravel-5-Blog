@@ -145,14 +145,14 @@ class {{ ucfirst($categories) }}Controller extends Controller {
         } else {
             $category = new Categories;
         }
-        
-		$languages = $this->data["lang"];
+        $category->color = $this->data["color"];
+		$languages = Locale::all();
 
-		foreach ($languages as $language) {
-
-			$newLang = $category->translate($language);
-			$newLang->name = $this->data["name_".$language];
+		foreach ($languages as $lang) {
+			$newLang = $category->translate($lang->language);
+			$newLang->name = $this->data["name_".$lang->language];
 		}
+		
 		if($category->save()){
 			return $category;
 		} else {

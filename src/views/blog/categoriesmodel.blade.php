@@ -41,7 +41,7 @@ class {{ ucfirst($categories) }} extends Model implements TranslatableContract{
 	 */
 	public function post()
     {
-        return $this->belongsToMany('{{$app_name}}{{$blog_path}}\Models\{{ ucfirst($postsTable) }}', '{{ $pivotCategoriesTable }}', '{{ $postsTable }}_id', '{{ $categories }}_id');
+        return $this->belongsToMany('{{$app_name}}{{$blog_path}}\Models\{{ ucfirst($postsTable) }}', '{{ $pivotCategoriesTable }}', '{{ $categories }}_id', '{{ $postsTable }}_id');
     }
 
 }

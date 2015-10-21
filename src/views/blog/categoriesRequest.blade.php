@@ -2,6 +2,7 @@
  namespace {{$app_name}}{{$blog_path}}\Requests;
 
 use {{$app_name}}Http\Requests\Request;
+use {{$locale_model}};
 use {{$app_name}}{{$blog_path}}\Models\{{ ucfirst($categories) }};
 
 class {{ ucfirst($categories) }}Request extends Request
@@ -32,16 +33,15 @@ class {{ ucfirst($categories) }}Request extends Request
 
     /**
      * Get the validation rules that apply to the request.
-     *
      * @return array
      */
     public function rules()
     {
         $rules = [];
-        @foreach($locales as $local)
-
-        $rules["name_{{$local}}"]   = 'required';
-        @endforeach
+        $languages = Locale::all();
+        foreach($languages as $lang){
+            $rules["name_".$lang->language] = 'required';
+        }
 
         return $rules;
     }

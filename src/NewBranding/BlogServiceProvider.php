@@ -21,7 +21,7 @@ class BlogServiceProvider extends ServiceProvider {
         ]);
 
         $this->publishes([
-            __DIR__.'/../public' => public_path('blog'),
+            __DIR__.'/../public' => public_path('blog_assets'),
         ], 'public');
 
         $this->loadViewsFrom(__DIR__.'/../views', 'blog');
