@@ -4,12 +4,15 @@ Custom Blog Package for Laravel 5
 
 ## Requirements
 
+<<<<<<< HEAD
 # Blog Package for Laravel 5
 
 Custom Blog Package for Laravel 5
 
 ## Requirements
 
+=======
+>>>>>>> 6275c91a63a0b05a15a886815275f417c6329824
    **Vinkia: Translator**: https://github.com/vinkla/translator
    
    **Mcamara Laravel Localization**: https://github.com/mcamara/laravel-localization
@@ -17,6 +20,7 @@ Custom Blog Package for Laravel 5
    **Cviebrock Eloquent-Sluggable**: https://github.com/cviebrock/eloquent-sluggable
    
    **Yajra Laravel Datatables**: http://yajra.github.io/laravel-datatables/
+<<<<<<< HEAD
 
 All the packages will be installed automatically if you don't have it.
 
@@ -70,6 +74,8 @@ You should create the requests files with the following command:
 
     
 
+=======
+>>>>>>> 6275c91a63a0b05a15a886815275f417c6329824
 
 All the packages will be installed automatically if you don't have it.
 
@@ -119,6 +125,8 @@ You should create the requests files with the following command:
 
 
 ##ToDo
+*Comment System
+
 *Add a better readme
 
     
