@@ -37,7 +37,8 @@
 			<div class="wrapper all-w">
 				@if(count($posts) > 0)
 					@foreach($posts as $post)
-						@if(date('Y-m-d') > $post->publish_date)
+
+						@if(date('Y-m-d') >= $post->publish_date)
 						<div class="blog-noticia-item xs-12 m-6 l-3 col">
 							<a href="{{url('blog/'.$post->slug)}}">
 								<div class="round bg" style="background-image: url( {{asset('blog_assets/uploads/'.date('m-Y', strtotime($post->publish_date))."/".Config::get('blog.thumbnail_folder').'/'.$post->featured_image)}} )">
