@@ -59,7 +59,7 @@
 
 			<div class="wrapper text-center">
 				 <div class="fb-share-button" 
-			        data-href="{{Request::url()}}" 
+			        data-href="{{Request::url('/')}}" 
 			        data-layout="button_count">
 			    </div>
 			    <div class="pt-5  twitter-btn">
