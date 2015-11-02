@@ -49,8 +49,8 @@
 						@else
 						<li><a href="{{url('registrar_empresa')}}">Registra tu Hotel</a></li>
 						@endif
-						<li><a href="#">Política de privacidad</a></li>
-						<li><a href="#">Aviso legal</a></li>
+						<li><a href="{{url('politica-de-privacidad')}}">Política de privacidad</a></li>
+						<li><a href="{{url('politica-de-privacidad')}}">Aviso legal</a></li>
 					</ul>
 				</div>
 				<!-- Fin menus footer -->
