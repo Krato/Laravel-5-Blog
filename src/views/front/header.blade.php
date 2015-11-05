@@ -78,7 +78,7 @@
 					<li><a id="login-access" href="#" class="js-login-access">{{Lang::get('front/menu.login')}}</a></li>
 					<li><a href="{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.public_blog')) }}">{{Lang::get('front/menu.blog')}}</a></li>
 					<li class="dropdown">
-						<a href="#" style="padding-left:0px;">
+						<a href="#" style="display:block">
 							Idiomas
 							<i class="icon-down"></i>
 						</a>
@@ -121,7 +121,7 @@
 					</li>
 					<li><a href="{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.public_blog')) }}">{{Lang::get('front/menu.blog')}}</a></li>
 					<li class="dropdown">
-						<a href="#" style="padding-left:0px;">
+						<a href="#" style="display:block">
 							Idiomas
 							<i class="icon-down"></i>
 						</a>
