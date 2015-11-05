@@ -71,6 +71,19 @@
 					<li><a href="#" class="js-login-register">{{Lang::get('front/menu.register')}}</a></li>
 					<li><a id="login-access" href="#" class="js-login-access">{{Lang::get('front/menu.login')}}</a></li>
 					<li><a href="{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.public_blog')) }}">{{Lang::get('front/menu.blog')}}</a></li>
+					<li class="dropdown">
+						<a href="#" style="padding-left:0px;">
+							Idiomas
+							<i class="icon-down"></i>
+						</a>
+						<ul class="sub-menu">
+							<li><a href="#" onclick="doGTranslate('es|es');return false;">Español</a></li>
+							<li><a href="#" onclick="doGTranslate('es|en');return false;">Inglés</a></li>
+							<li><a href="#" onclick="doGTranslate('es|fr');return false;">Francés</a></li>
+							<li><a href="#" onclick="doGTranslate('es|de');return false;">Alemán</a></li>
+							<li><a href="#" onclick="doGTranslate('es|ru');return false;">Ruso</a></li>
+						</ul>
+					</li>
 				</ul>
 				@else
 				<ul class="text-right">
@@ -101,6 +114,19 @@
 						</ul>
 					</li>
 					<li><a href="{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.public_blog')) }}">{{Lang::get('front/menu.blog')}}</a></li>
+					<li class="dropdown">
+						<a href="#" style="padding-left:0px;">
+							Idiomas
+							<i class="icon-down"></i>
+						</a>
+						<ul class="sub-menu">
+							<li><a href="#" onclick="doGTranslate('es|es');return false;">Español</a></li>
+							<li><a href="#" onclick="doGTranslate('es|en');return false;">Inglés</a></li>
+							<li><a href="#" onclick="doGTranslate('es|fr');return false;">Francés</a></li>
+							<li><a href="#" onclick="doGTranslate('es|de');return false;">Alemán</a></li>
+							<li><a href="#" onclick="doGTranslate('es|ru');return false;">Ruso</a></li>
+						</ul>
+					</li>
 				</ul>
 				@endif
 			
