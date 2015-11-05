@@ -21,7 +21,13 @@
 	<link href='http://fonts.googleapis.com/css?family=Dosis:400,500,600,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="{{ asset('css/estilos.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/fonts/icomoon/style.css') }}">
-
+	<style>
+		#goog-gt-tt {display:none !important;}
+		.goog-te-banner-frame {display:none !important;}
+		.goog-te-menu-value:hover {text-decoration:none !important;}
+		#google_translate_element2 {display:none!important;}
+		body {top:0 !important;}
+	</style>
 	<script src="//use.typekit.net/ngc2qtg.js"></script>
 	<script>try{Typekit.load();}catch(e){}</script>
 </head>
