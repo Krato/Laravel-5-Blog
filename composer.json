@@ -4,10 +4,10 @@
     "keywords": ["laravel","laravel 5","blog"],
     "require": {
         "php": ">=5.4.0",
-        "laravel/framework": "5.0.*",
+        "laravel/framework": "5.*",
         "vinkla/translator": "^2.2",
         "mcamara/laravel-localization": "1.0.*",
-        "cviebrock/eloquent-sluggable": ">=3.0.0-alpha",
+        "cviebrock/eloquent-sluggable": "^3.1",
         "yajra/laravel-datatables-oracle": "~5.0"
     },
     "license": "MIT",
