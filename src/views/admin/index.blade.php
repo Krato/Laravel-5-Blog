@@ -1,8 +1,8 @@
-@extends('admin.plantilla.app')
+@extends('admin.layout')
 @section('custom_css')
-<link type="text/css" rel="stylesheet" href="{{ asset('/admin/assets/plugins/jquery-datatable/media/css/jquery.dataTables.css') }}">
-<link type="text/css" rel="stylesheet" href="{{ asset('/admin/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css') }}">
-<link media="screen" type="text/css" rel="stylesheet" href="{{ asset('/admin/assets/plugins/datatables-responsive/css/datatables.responsive.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ asset('/admin_theme/assets/plugins/jquery-datatable/media/css/jquery.dataTables.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ asset('/admin_theme/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css') }}">
+<link media="screen" type="text/css" rel="stylesheet" href="{{ asset('/admin_theme/assets/plugins/datatables-responsive/css/datatables.responsive.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('/blog_assets/css/blog.css') }}">
 @endsection
 @section('breadcum')
@@ -100,11 +100,11 @@
 </div>
 @endsection
 @section('custom_js')
-<script src="{{ asset('/admin/assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('/admin/assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js') }}" type="text/javascript" ></script>
-<script src="{{ asset('/admin/assets/plugins/datatables-responsive/js/datatables.responsive.js') }}" type="text/javascript"></script>
-<script src="{{ asset('/admin/assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js') }}" type="text/javascript"></script>
-<script src="{{ asset('/admin/assets/plugins/datatables-responsive/js/lodash.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/admin_theme/assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/admin_theme/assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js') }}" type="text/javascript" ></script>
+<script src="{{ asset('/admin_theme/assets/plugins/datatables-responsive/js/datatables.responsive.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/admin_theme/assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/admin_theme/assets/plugins/datatables-responsive/js/lodash.min.js') }}" type="text/javascript"></script>
 <script src="//cdn.datatables.net/plug-ins/1.10.7/api/fnReloadAjax.js" type="text/javascript"></script>
 <script type="text/javascript">
 var table;
@@ -175,9 +175,10 @@ var table;
             },
             error: function(error){
                 $('.modal').modal('hide');
-                $.fn.notifica({
-                    type: "error",
-                    message: "{{Lang::get('blog::blog.database.error')}}"
+                new PNotify({
+                    title: "Error",
+                    text: "{{Lang::get('blog::blog.database.error')}}",
+                    type: "error"
                 });
             }
         });
@@ -211,9 +212,10 @@ var table;
             },
             error: function(error){
                 $('.modal').modal('hide');
-                $.fn.notifica({
-                    type: "error",
-                    message: "{{Lang::get('blog::blog.database.error')}}"
+                new PNotify({
+                    title: "Error",
+                    text: "{{Lang::get('blog::blog.database.error')}}",
+                    type: "error"
                 });
             }
         });
@@ -241,9 +243,10 @@ var table;
             },
             error: function(error){
                 $('.modal').modal('hide');
-                $.fn.notifica({
-                    type: "error",
-                    message: "{{Lang::get('blog::blog.database.error')}}"
+                new PNotify({
+                    title: "Error",
+                    text: "{{Lang::get('blog::blog.database.error')}}",
+                    type: "error"
                 });
             }
         });

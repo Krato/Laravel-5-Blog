@@ -1,4 +1,4 @@
-@extends('admin.plantilla.app')
+@extends('admin.layout')
 @section('custom_css')
 
 <link type="text/css" rel="stylesheet" href="{{ asset('/blog_assets/plugins/redactor/redactor.css') }}">
@@ -317,73 +317,73 @@
 @endsection
 @section('custom_js')
 
-	<script src="{{ asset('/admin/assets/plugins/classie/classie.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('/admin_theme/assets/plugins/classie/classie.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('/blog_assets/plugins/redactor/redactor.js') }}" type="text/javascript"></script>
     @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
     <script src="{{ asset('/blog_assets/plugins/redactor/lang/'.$localeCode.'.js') }}" type="text/javascript"></script>
     @endforeach
-    <script src="{{ asset('/admin/assets/plugins/redactor/plugins/fullscreen.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/admin/assets/plugins/redactor/plugins/fontcolor.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/admin/assets/plugins/redactor/plugins/video.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/admin_theme/assets/plugins/redactor/plugins/fullscreen.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/admin_theme/assets/plugins/redactor/plugins/fontcolor.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/admin_theme/assets/plugins/redactor/plugins/video.js') }}" type="text/javascript"></script>
 
 	<script src="{{ asset('/blog_assets/plugins/bootstrap-tag/bootstrap-tagsinput.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('/blog_assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/blog_assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js') }}" type="text/javascript"></script>
-    
-	<script>
-		@foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+
+    <script>
+        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
             $('#content-{{$localeCode}}').redactor({
-                minHeight: 350,
-                maxHeight: 800,
-                lang: "{{$localeCode}}",
-                imageUpload: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog')) }}/upload_editor_image",
-                cleanOnPaste: true,
-                cleanSpaces: true,
-                removeComments: true,
-                removeEmpty: ['strong', 'em', 'span', 'p'],
-                buttonsHide: ['orderedlist'],
-                formatting: ['p', 'blockquote', 'h2', 'h3', 'h4'],
-                plugins: ['fullscreen',  'video', 'fontcolor'],
-                imageUploadCallback: function(image, json)
-                {
-                    $(image).attr('data-name', json.name);
-                    $(image).attr('data-folder', json.folder);
-                },
-                imageDeleteCallback: function(url, image)
-                {
-                    var datos = {
-                        name : $(image).attr('data-name'),
-                        folder : $(image).attr('data-folder')
-                    }
-                    $.ajax({
-                        url: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog')) }}/remove_editor_image",
-                        beforeSend: function (request){
-                            request.setRequestHeader("X-CSRF-TOKEN", $('[name="_token"]').val());
-                        },
-                        type: 'post',
-                        cache: false,
-                        dataType: 'json',
-                        data: datos
-                    });
+            minHeight: 350,
+            maxHeight: 800,
+            lang: "{{$localeCode}}",
+            imageUpload: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog')) }}/upload_editor_image",
+            cleanOnPaste: true,
+            cleanSpaces: true,
+            removeComments: true,
+            removeEmpty: ['strong', 'em', 'span', 'p'],
+            buttonsHide: ['orderedlist'],
+            formatting: ['p', 'blockquote', 'h2', 'h3', 'h4'],
+            plugins: ['fullscreen',  'video', 'fontcolor'],
+            imageUploadCallback: function(image, json)
+            {
+                $(image).attr('data-name', json.name);
+                $(image).attr('data-folder', json.folder);
+            },
+            imageDeleteCallback: function(url, image)
+            {
+                var datos = {
+                    name : $(image).attr('data-name'),
+                    folder : $(image).attr('data-folder')
                 }
-            });
-        @endforeach
+                $.ajax({
+                    url: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog')) }}/remove_editor_image",
+                    beforeSend: function (request){
+                        request.setRequestHeader("X-CSRF-TOKEN", $('[name="_token"]').val());
+                    },
+                    type: 'post',
+                    cache: false,
+                    dataType: 'json',
+                    data: datos
+                });
+            }
+        });
+                @endforeach
 
-        var imageUpload = document.getElementById('filePhoto');
-	    imageUpload.addEventListener('change', handleImageFeatured, false);
+                var imageUpload = document.getElementById('filePhoto');
+        imageUpload.addEventListener('change', handleImageFeatured, false);
 
 
-		imageUpload.ondragover = function () { $('.uploader_featured').addClass('hover'); return false; };
-		imageUpload.ondragend = function () { $('.uploader_featured').removeClass('hover'); return false; };
-		acceptedTypes = {
-	      'image/png': true,
-	      'image/jpeg': true,
-	      'image/gif': true,
-	      'image/bmp': false
-	    };
-		function handleImageFeatured(e) {
-		    var readerUp = new FileReader();
-		    readerUp.onload = function (event) {
+        imageUpload.ondragover = function () { $('.uploader_featured').addClass('hover'); return false; };
+        imageUpload.ondragend = function () { $('.uploader_featured').removeClass('hover'); return false; };
+        acceptedTypes = {
+            'image/png': true,
+            'image/jpeg': true,
+            'image/gif': true,
+            'image/bmp': false
+        };
+        function handleImageFeatured(e) {
+            var readerUp = new FileReader();
+            readerUp.onload = function (event) {
                 errorImageUpload = false;
 
                 var size = document.getElementById('filePhoto').files[0].size;
@@ -391,11 +391,11 @@
                     alert("Elige una imagen más pequeña");
                     errorImageUpload = true;
                 }
-		    	var buffer = readerUp.result;
-		    	var int32View = new Int32Array(buffer);
-		    	var mimeType = event.target.result.split(",")[0].split(":")[1].split(";")[0];
+                var buffer = readerUp.result;
+                var int32View = new Int32Array(buffer);
+                var mimeType = event.target.result.split(",")[0].split(":")[1].split(";")[0];
 
-		        if(acceptedTypes[mimeType] === true && !errorImageUpload){
+                if(acceptedTypes[mimeType] === true && !errorImageUpload){
 
 
                     var img = new Image;
@@ -412,70 +412,70 @@
                         }
                     };
 
-		        			        }
-		    }
-		    readerUp.readAsDataURL(e.target.files[0]);
-		}
+                }
+            }
+            readerUp.readAsDataURL(e.target.files[0]);
+        }
 
 
-		//categories
+        //categories
         $('select.colores_categorias_new').simplecolorpicker({theme: 'fontawesome'});
         $('select.colores_categorias').simplecolorpicker({theme: 'fontawesome'});
 
 
         $('#tags').tagsinput();
-		$('#chose_date').datepicker({
-			format: "dd/mm/yyyy",
+        $('#chose_date').datepicker({
+            format: "dd/mm/yyyy",
             language: "es",
             autoclose: true
-		}).on('changeDate', function(e){
-	       	$("#fecha_publicacion").text($("#publish_date").val());
-	    }).on('show', function(e){
-	       	$(".datepicker").css("z-index", "");
-	    });
+        }).on('changeDate', function(e){
+            $("#fecha_publicacion").text($("#publish_date").val());
+        }).on('show', function(e){
+            $(".datepicker").css("z-index", "");
+        });
 
-	    //Check the categories chosen */
-	    $('input[type="checkbox"]').click(function() {
+        //Check the categories chosen */
+        $('input[type="checkbox"]').click(function() {
 
             if ($("#categories").val() != $(this).val()){
                 $('input[type="checkbox"]').not(this).prop('checked', false);
                 $("#categories").val($(this).val());
             } else {
                 $('input[type="checkbox"]').eq(0).prop('checked', true);
-                 $("#categories").val(1);
+                $("#categories").val(1);
             }
-	    	
-	    });
 
-	    //Categories
-	    $(document).on('click','#createCategory',function(e){
-        	e.preventDefault();
-        	locales = [];
-        		@foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-        		locales.push("{{$localeCode}}");
-        		@endforeach
-        	
-        	var datos = {
-        		lang : locales,
-                color: $('select[name="color_cat"]').find(':selected').attr('data-tipo'),
-        		@foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-        		'name_{{$localeCode}}': $('[name="name-{{$localeCode}}"]').val(),
-        		@endforeach
-            };
+        });
+
+        //Categories
+        $(document).on('click','#createCategory',function(e){
+            e.preventDefault();
+            locales = [];
+            @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+            locales.push("{{$localeCode}}");
+                    @endforeach
+
+                var datos = {
+                        lang : locales,
+                        color: $('select[name="color_cat"]').find(':selected').attr('data-tipo'),
+                        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                        'name_{{$localeCode}}': $('[name="name-{{$localeCode}}"]').val(),
+                        @endforeach
+                    };
             //console.log(datos);
-            
+
             $.ajax({
                 url: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog/categories/store')) }}",
                 beforeSend: function (request){
-                	request.setRequestHeader("X-CSRF-TOKEN", $('[name="_token"]').val());
-            	},
+                    request.setRequestHeader("X-CSRF-TOKEN", $('[name="_token"]').val());
+                },
                 type: 'post',
                 cache: false,
                 dataType: 'json',
                 data: datos,
                 success: function(data) {
-                	$('.modal').modal('hide');
-                	var checkbox = '<div class="checkbox check-success"> \
+                    $('.modal').modal('hide');
+                    var checkbox = '<div class="checkbox check-success"> \
                                         <input type="checkbox"  value="'+ data.id +'" id="category_'+ data.id +'">  \
                                         <label for="category_'+ data.id +'">'+ data.name +'</label> \
                                         <span class="color-block '+ data.color +'"></span> \
@@ -484,27 +484,27 @@
                                             <a class="right-panel-options red removeCategory" href="#" data-cat="'+ data.id +'" data-toggle="modal" data-target="#modalRemoveCategory">{{ trans("blog::blog.actions.delete")  }}</a> \
                                         </div> \
                                     </div>';
-			    	//console.log(checkbox);
-                	$("#categories_container").append(checkbox)
+                    //console.log(checkbox);
+                    $("#categories_container").append(checkbox)
                     $.fn.notifica({
                         type: "message",
                         message: "{{Lang::get('blog::blog.database.category_saved')}}"
                     });
                 },
                 error: function(error){
-                	$('.modal').modal('hide');
+                    $('.modal').modal('hide');
                     $.fn.notifica({
                         type: "error",
                         message: "{{Lang::get('blog::blog.database.error')}}"
                     });
                 }
             });
-			
-        	return false;
+
+            return false;
         });
 
 
-		$(document).on('click','.editCategory',function(){
+        $(document).on('click','.editCategory',function(){
             var datos = {
                 id : $(this).attr("data-cat")
             }
@@ -524,12 +524,12 @@
                     $.each(data["languages"], function(i, item) {
                         $('[name="name-edit-'+i+'"]').val(item.name)
                     });
-                    $('#color_cat_edit > option[data-tipo="'+data.color+'"]').prop('selected', true); 
+                    $('#color_cat_edit > option[data-tipo="'+data.color+'"]').prop('selected', true);
                     var color =$('#color_cat_edit').val();
                     $('select[name="color_cat_edit"]').simplecolorpicker('selectColor', color);
                     $('#modalEditCategory').modal('show');
 
-                    
+
                 },
                 error: function(error){
                     $('.modal').modal('hide');
@@ -541,19 +541,19 @@
             });
         });
 
-		$(document).on('click','#updateCategory',function(){
+        $(document).on('click','#updateCategory',function(){
             locales = [];
-    		@foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-    		locales.push("{{$localeCode}}");
-    		@endforeach
-            var datos = {
-            	catId : $('[name="edit-catId"]').val(),
-                color: $('select[name="color_cat_edit"]').find(':selected').attr('data-tipo'),
-        		lang : locales,
-        		@foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-        		'name_{{$localeCode}}': $('[name="name-edit-{{$localeCode}}"]').val(),
-        		@endforeach
-            };
+            @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+            locales.push("{{$localeCode}}");
+                    @endforeach
+                    var datos = {
+                        catId : $('[name="edit-catId"]').val(),
+                        color: $('select[name="color_cat_edit"]').find(':selected').attr('data-tipo'),
+                        lang : locales,
+                        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                        'name_{{$localeCode}}': $('[name="name-edit-{{$localeCode}}"]').val(),
+                        @endforeach
+                    };
             $.ajax({
                 url: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog/categories/update')) }}",
                 beforeSend: function (request){
@@ -572,7 +572,7 @@
                         type: "message",
                         message: "{{Lang::get('blog::blog.database.category_updated')}}"
                     });
-                    
+
                 },
                 error: function(error){
                     $.fn.notifica({
@@ -587,10 +587,10 @@
         $(document).on('click','.removeCategory',function(){
 
             var id = $(this).attr("data-cat");
-            
+
             $("#remove-catId").val(id);
             $("#chosen_category").text($(this).attr("data-name"));
-            
+
         });
 
         $(document).on('click','#removeCategoryYes',function(){
@@ -615,7 +615,7 @@
                         type: "message",
                         message: "{{Lang::get('blog::blog.database.category_deleted')}}"
                     });
-                    
+
                 },
                 error: function(error){
                     $.fn.notifica({
@@ -624,12 +624,12 @@
                     });
                 }
             });
-            
+
         });
 
 
-	    $(document).on('click','.close_modal',function(){
+        $(document).on('click','.close_modal',function(){
             $('.modal').modal('hide');
         });
-	</script>
+    </script>
 @endsection

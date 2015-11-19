@@ -1,4 +1,4 @@
-@extends('admin.plantilla.app')
+@extends('admin.layout')
 @section('custom_css')
 <link type="text/css" rel="stylesheet" href="{{ asset('/blog_assets/plugins/redactor/redactor.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('/blog_assets/plugins/bootstrap-tag/bootstrap-tagsinput.css') }}">
@@ -189,7 +189,7 @@
 
 {!! Form::open(['url' => LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog/update'), 'method'=> 'post', 'files' => true,'id'=>'blog-edita', ]) !!}
 <input type="hidden" name="postId" id="postId" value="{{$post->id}}">
-<input type="hidden" name="categories" id="categories" value="{{ implode(",", $post->categories()->lists('id')) }}">
+<input type="hidden" name="categories" id="categories" value="{{ implode(",", $post->categories()->lists('id')->all()) }}">
 <input type="hidden" name="image_changed" id="image_changed" value="0">
 <div class="panel col-md-9">
     <div class="panel-heading">
@@ -225,7 +225,7 @@
             </div>
 			<div class="form-group form-group-default ">
 		        <label>{{ trans('blog::blog.tables.tags')  }}</label>
-		        <input type="text" name="tags" id="tags" class="form-control" value="{{ implode(",", $post->tag()->lists('name')) }}">
+		        <input type="text" name="tags" id="tags" class="form-control" value="{{ implode(",", $post->tag()->lists('name')->all()) }}">
 		    </div>	
         </div>
     </div>
@@ -284,7 +284,7 @@
 		</div>
 		<div class="panel-body">
 			<div id="categories_container">
-			<?php $catChosen = $post->categories()->get()->lists('id'); ?>
+			<?php $catChosen = $post->categories()->get()->lists('id')->all(); ?>
 			@foreach($categories as $category)
 				<div class="checkbox check-success">
 					@if(  false !== array_search($category->id, $catChosen))
@@ -322,14 +322,14 @@
 {!! Form::close() !!}
 @endsection
 @section('custom_js')
-	<script src="{{ asset('/admin/assets/plugins/classie/classie.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('/admin_theme/assets/plugins/classie/classie.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('/blog_assets/plugins/redactor/redactor.js') }}" type="text/javascript"></script>
     @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
     <script src="{{ asset('/blog_assets/plugins/redactor/lang/'.$localeCode.'.js') }}" type="text/javascript"></script>
     @endforeach
-    <script src="{{ asset('/admin/assets/plugins/redactor/plugins/fullscreen.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/admin/assets/plugins/redactor/plugins/fontcolor.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/admin/assets/plugins/redactor/plugins/video.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/admin_theme/assets/plugins/redactor/plugins/fullscreen.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/admin_theme/assets/plugins/redactor/plugins/fontcolor.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/admin_theme/assets/plugins/redactor/plugins/video.js') }}" type="text/javascript"></script>
 
 	<script src="{{ asset('/blog_assets/plugins/bootstrap-tag/bootstrap-tagsinput.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('/blog_assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}" type="text/javascript"></script>
@@ -346,7 +346,7 @@
                 minHeight: 350,
                 maxHeight: 800,
                 lang: "{{$localeCode}}",
-                imageUpload: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog')) }}/upload_editor_image",
+                imageUpload: "{{ url('admin/blog/upload_editor_image') }}",
                 buttonsHide: ['orderedlist'],
                 formatting: ['p', 'blockquote', 'h2', 'h3', 'h4'],
                 plugins: ['fullscreen',  'video', 'fontcolor'],
@@ -362,7 +362,7 @@
                         folder : $(image).attr('data-folder')
                     }
                     $.ajax({
-                        url: "{{ url(LaravelLocalization::getURLFromRouteNameTranslated(Config::get('app.locale'),'routes.admin/blog')) }}/remove_editor_image",
+                        url: "{{ url('admin/blog/remove_editor_image') }}",
                         beforeSend: function (request){
                             request.setRequestHeader("X-CSRF-TOKEN", $('[name="_token"]').val());
                         },
@@ -569,16 +569,19 @@
                                         </div> \
                                     </div>';
                 	$("#categories_container").append(checkbox)
-                    $.fn.notifica({
-                        type: "message",
-                        message: "{{Lang::get('ajax.category_added')}}"
+                    new PNotify({
+                        title: "Info",
+                        text:  "{{Lang::get('ajax.category_added')}}",
+                        type: "info"
                     });
                 },
                 error: function(error){
                 	$('.modal').modal('hide');
-                    $.fn.notifica({
-                        type: "error",
-                        message: "{{Lang::get('ajax.error_503')}}"
+
+                    new PNotify({
+                        title: "Error",
+                        text: "{{Lang::get('blog::blog.database.error')}}",
+                        type: "error"
                     });
                 }
             });
@@ -614,9 +617,10 @@
                 },
                 error: function(error){
                     $('.modal').modal('hide');
-                    $.fn.notifica({
-                        type: "error",
-                        message: "{{Lang::get('ajax.error_503')}}"
+                    new PNotify({
+                        title: "Error",
+                        text: "{{Lang::get('blog::blog.database.error')}}",
+                        type: "error"
                     });
                 }
             });
@@ -650,16 +654,18 @@
                     $('label[for=category_'+data.id+']').next().removeClass().addClass('color-block').addClass(data.color)
                     $('.modal').modal('hide');
 
-                    $.fn.notifica({
-                        type: "message",
-                        message: "{{Lang::get('ajax.category_added')}}"
+                    new PNotify({
+                        title: "Info",
+                        text:  "{{Lang::get('ajax.category_added')}}",
+                        type: "info"
                     });
                     
                 },
                 error: function(error){
-                    $.fn.notifica({
-                        type: "error",
-                        message: "{{Lang::get('ajax.error_503')}}"
+                    new PNotify({
+                        title: "Error",
+                        text: "{{Lang::get('blog::blog.database.error')}}",
+                        type: "error"
                     });
                 }
             });
@@ -692,17 +698,20 @@
 
                     $('label[for=category_'+data+']').remove();
                     $('.modal').modal('hide');
-                    $.fn.notifica({
-                        type: "message",
-                        message: "{{Lang::get('blog::blog.database.category_deleted')}}"
+
+                    new PNotify({
+                        title: "Info",
+                        text:  "{{Lang::get('blog::blog.database.category_deleted')}}",
+                        type: "info"
                     });
                     
                 },
                 error: function(error){
                     $('.modal').modal('hide');
-                    $.fn.notifica({
-                        type: "error",
-                        message: "{{Lang::get('blog::blog.database.error')}}"
+                    new PNotify({
+                        title: "Error",
+                        text: "{{Lang::get('blog::blog.database.error')}}",
+                        type: "error"
                     });
                 }
             });

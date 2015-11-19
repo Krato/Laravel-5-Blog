@@ -173,7 +173,8 @@ class BlogMigrate extends Command {
 
             $this->info("Creating Requests");
             $this->info("");
-            if ($this->createRequests($blog_path, $postsTable, $userPostsTable, $commentsTable, $tagsTable, $categories, $pivotTagsTable, $pivotCategoriesTable, $locales)) {
+
+            if ($this->createRequests($blog_path, $postsTable, $userPostsTable, $commentsTable, $tagsTable, $categories, $pivotTagsTable, $pivotCategoriesTable, $locales, $locale_model)) {
                 $this->info("Requests successfully created!");
             } else {
                 $this->error(
@@ -220,6 +221,7 @@ class BlogMigrate extends Command {
             $this->info('Please indicate an argument');
             $this->info('');
             $this->info('List of arguments:');
+            $this->info('   create-paths');
             $this->info('   migrate');
             $this->info('   models');
             $this->info('   requests');
@@ -394,7 +396,7 @@ class BlogMigrate extends Command {
      *
      * @return bool
      */
-    protected function createRequests($blog_path, $postsTable, $userPostsTable, $commentsTable,  $tagsTable, $categories, $pivotTagsTable, $pivotCategoriesTable, $locales)
+    protected function createRequests($blog_path, $postsTable, $userPostsTable, $commentsTable,  $tagsTable, $categories, $pivotTagsTable, $pivotCategoriesTable, $locales,  $locale_model)
     {
 
         $error = array();
@@ -461,7 +463,7 @@ class BlogMigrate extends Command {
         }
 
         //Create the Categories Requests
-        $data = compact('blog_path', 'categories', 'app_name', 'locales');
+        $data = compact('blog_path', 'categories', 'app_name', 'locales', 'locale_model');
         $output = $this->laravel->view->make('blog::blog.categoriesRequest')->with($data)->render();
         if (!file_exists($categoriesRequestFile) && $fs = fopen($categoriesRequestFile, 'x')) {
             fwrite($fs, $output);
