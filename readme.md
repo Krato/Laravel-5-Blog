@@ -5,7 +5,7 @@ Custom Blog Package for Laravel 5
 ## Requirements
 
 
-   **Vinkia: Translator**: https://github.com/vinkla/translator
+   **Vinkla: Translator**: https://github.com/vinkla/translator
    
    **Mcamara Laravel Localization**: https://github.com/mcamara/laravel-localization
    
