@@ -43,11 +43,10 @@ Route::group(
         Route::post('admin/blog/upload_editor_image', 'starter\Blog\Controllers\PostController@upload_image_editor');
         Route::post('admin/blog/remove_editor_image', 'starter\Blog\Controllers\PostController@remove_editor_images');
         
-        Route::get(LaravelLocalization::transRoute('routes.public_blog'), 'starter\Blog\Controllers\PostController@index_front');
-        Route::get(LaravelLocalization::transRoute('routes.public_blog'), 'starter\Blog\Controllers\PostController@index_front');
+        Route::get(LaravelLocalization::transRoute('routes.menu.public_blog'), 'starter\Blog\Controllers\PostController@index_front');
 
-        Route::get('blog/{slug}', 'starter\Blog\Controllers\PostController@show')->where('slug', '[a-z0-9-]+');
-        Route::get('blog/categoria/{slug}', 'starter\Blog\Controllers\PostController@showCategory')->where('slug', '[a-z0-9-]+');
-        Route::get('blog/tag/{slug}', 'starter\Blog\Controllers\PostController@showTag')->where('slug', '[a-z0-9-]+');
+        Route::get(LaravelLocalization::transRoute('routes.menu.public_blog_item'), 'starter\Blog\Controllers\PostController@show')->where('slug', '[a-z0-9-]+');
+        Route::get(LaravelLocalization::transRoute('routes.menu.public_blog_category'), 'starter\Blog\Controllers\PostController@showCategory')->where('slug', '[a-z0-9-]+');
+        Route::get(LaravelLocalization::transRoute('routes.menu.public_blog_tag'), 'starter\Blog\Controllers\PostController@showTag')->where('slug', '[a-z0-9-]+');
 
 });
