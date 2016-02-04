@@ -6,8 +6,8 @@
 <link type="text/css" rel="stylesheet" href="{{ asset('/blog_assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('/blog_assets/css/blog.css') }}">
 
-
-
+{{--FancyBox--}}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" type="text/css" media="screen" />
 <style>
 .uploader {position:relative; overflow:hidden; width:300px; height:350px; background:#f3f3f3; border:2px dashed #e8e8e8;}
 
@@ -310,12 +310,13 @@
 			<div class="panel-title">{{ trans('blog::blog.tables.photo')  }}</div>
 		</div>
 		<div class="panel-body">
-			<div class="uploader_featured" onclick="$('#filePhoto').click()">
-			<div class="text-center">Haz click aquí o arrastra una imagen</div>
-			    <img id="featured" src="{{asset('blog_assets/uploads/'.date('m-Y', strtotime($post->publish_date))."/".Config::get('blog.thumbnail_folder').'/'.$post->featured_image)}}" style="display: inline;"/>
-			    <input type="file" name="featured_image"  id="filePhoto"  />
-			</div>
-			
+            <a style="display:none" href="http://localhost/starter/public/filemanager/dialog.php?type=1&field_id=fieldID&relative_url=1?&crossdomain=1&is_blog=1&akey={{ Auth::id() }}" data-width="900"  data-height="600" class="btn iframe-btn" type="button"></a>
+            <div class="uploader_featured" onclick="$('.iframe-btn').click()">
+                <div class="text-center">Haz click aquí o arrastra una imagen</div>
+                    <img id="featured" src="{{asset('blog_assets/uploads/'.date('m-Y', strtotime($post->publish_date))."/".Config::get('blog.thumbnail_folder').'/'.$post->featured_image)}}" style="display: inline;"/>
+                    <input type="hidden" name="featured_image" id="featured_image">
+                </div>
+            </div>
 		</div>
 	</div>
 </div>
@@ -337,9 +338,66 @@
 
     <script src="{{ asset('/blog_assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/blog_assets/plugins/jslug/jslug.js') }}" type="text/javascript"></script>
-
+    {{--Fancy Box--}}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
     
 	<script>
+
+        /*
+         * INICIO FILE MANAGER
+         */
+        function OnMessage(e){
+            var event = e.originalEvent;
+            // Make sure the sender of the event is trusted
+            if(event.data.sender === 'responsivefilemanager'){
+                if(event.data.field_id){
+                    var fieldID=event.data.field_id;
+                    var url=event.data.url;
+                    var filename = url.substring(url.lastIndexOf('/')+1);
+                    $('#'+fieldID).val(url).trigger('change');
+                    $("#featured").attr({'src' : url }).show();
+                    $("#featured_image").val(filename);
+                    $('#image_changed').val(1);
+                    $.fancybox.close();
+                    // Delete handler of the message from ResponsiveFilemanager
+                    $(window).off('message', OnMessage);
+                }
+            }
+        }
+
+
+        function responsive_filemanager_callback(field_id){
+            if(field_id){
+                console.log(field_id);
+                var url=jQuery('#'+field_id).val();
+                console.log(url);
+                //alert('update '+field_id+" with "+url);
+                //your code
+            }
+        }
+
+        $('.iframe-btn').fancybox({
+            width		: 900,
+            height	    : 600,
+            type		: 'iframe',
+            fitToView   : false,
+            autoScale   : false,
+            afterLoad: function () {
+                this.width = $(this.element).data("width");
+                this.height = $(this.element).data("height");
+                $(".fancybox-inner").css({
+                    'width'     : $(this.element).data("width"),
+                    'min-height' : $(this.element).data("height")
+                })
+            },
+            beforeLoad : function(){
+                $(window).on('message', OnMessage);
+            }
+        });
+
+        /*
+         * FIN FILE MANAGER
+         */
 
 		@foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
             $('#content-{{$localeCode}}').redactor({
@@ -428,51 +486,51 @@
 
 
 
-        var imageUpload = document.getElementById('filePhoto');
-	    imageUpload.addEventListener('change', handleImageFeatured, false);
-
-		imageUpload.ondragover = function () { $('.uploader_featured').addClass('hover'); return false; };
-		imageUpload.ondragend = function () { $('.uploader_featured').removeClass('hover'); return false; };
-		acceptedTypes = {
-	      'image/png': true,
-	      'image/jpeg': true,
-	      'image/gif': true,
-	      'image/bmp': false
-	    };
-		function handleImageFeatured(e) {
-		    var readerUp = new FileReader();
-		    readerUp.onload = function (event) {
-		    	errorImageUpload = false;
-
-                var size = document.getElementById('filePhoto').files[0].size;
-                if(size > 4000000){
-                    alert("Elige una imagen más pequeña");
-                    errorImageUpload = true;
-                }
-                var buffer = readerUp.result;
-                var int32View = new Int32Array(buffer);
-                var mimeType = event.target.result.split(",")[0].split(":")[1].split(";")[0];
-
-		        if(acceptedTypes[mimeType] === true && !errorImageUpload){
-
-
-                    var img = new Image;
-                    img.src = readerUp.result;
-                    img.onload = function() {
-                        if(img.width > 3500 && img.height > 3500){
-                            alert("Elige una imagen con dimesiones más pequeñas");
-                            errorImageUpload = true;
-                        } else {
-                            $('.uploader_featured img').attr('src',event.target.result);
-                            $('.uploader_featured img').show();
-                            $('.uploader_featured').removeClass('hover');
-                            $('#image_changed').val(1);
-                        }
-                    }
-		        }
-		    }
-		    readerUp.readAsDataURL(e.target.files[0]);
-		}
+//        var imageUpload = document.getElementById('filePhoto');
+//	    imageUpload.addEventListener('change', handleImageFeatured, false);
+//
+//		imageUpload.ondragover = function () { $('.uploader_featured').addClass('hover'); return false; };
+//		imageUpload.ondragend = function () { $('.uploader_featured').removeClass('hover'); return false; };
+//		acceptedTypes = {
+//	      'image/png': true,
+//	      'image/jpeg': true,
+//	      'image/gif': true,
+//	      'image/bmp': false
+//	    };
+//		function handleImageFeatured(e) {
+//		    var readerUp = new FileReader();
+//		    readerUp.onload = function (event) {
+//		    	errorImageUpload = false;
+//
+//                var size = document.getElementById('filePhoto').files[0].size;
+//                if(size > 4000000){
+//                    alert("Elige una imagen más pequeña");
+//                    errorImageUpload = true;
+//                }
+//                var buffer = readerUp.result;
+//                var int32View = new Int32Array(buffer);
+//                var mimeType = event.target.result.split(",")[0].split(":")[1].split(";")[0];
+//
+//		        if(acceptedTypes[mimeType] === true && !errorImageUpload){
+//
+//
+//                    var img = new Image;
+//                    img.src = readerUp.result;
+//                    img.onload = function() {
+//                        if(img.width > 3500 && img.height > 3500){
+//                            alert("Elige una imagen con dimesiones más pequeñas");
+//                            errorImageUpload = true;
+//                        } else {
+//                            $('.uploader_featured img').attr('src',event.target.result);
+//                            $('.uploader_featured img').show();
+//                            $('.uploader_featured').removeClass('hover');
+//                            $('#image_changed').val(1);
+//                        }
+//                    }
+//		        }
+//		    }
+//		    readerUp.readAsDataURL(e.target.files[0]);
+//		}
 
 
 		//categories

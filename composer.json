@@ -8,7 +8,7 @@
         "vinkla/translator": "^2.2",
         "mcamara/laravel-localization": "1.0.*",
         "cviebrock/eloquent-sluggable": "^3.1",
-        "yajra/laravel-datatables-oracle": "~5.0"
+        "yajra/laravel-datatables-oracle": "~6.0"
     },
     "license": "MIT",
     "authors": [

@@ -124,3 +124,7 @@ li.active{
   width: 80%;
   margin: 45px auto 65px;
 }
+
+.uploader_featured{
+  cursor: pointer;
+}
