@@ -6,7 +6,7 @@
         "php": ">=5.4.0",
         "laravel/framework": "5.*",
         "vinkla/translator": "3.*",
-        "mcamara/laravel-localization": "1.6.*",
+        "mcamara/laravel-localization": "1.2.7",
         "cviebrock/eloquent-sluggable": "^3.1",
         "yajra/laravel-datatables-oracle": "~6.0"
     },
