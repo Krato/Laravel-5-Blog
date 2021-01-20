@@ -3,10 +3,9 @@
     "description": "Blog for Laravel 5",
     "keywords": ["laravel","laravel 5","blog"],
     "require": {
-        "php": ">=5.4.0",
         "laravel/framework": "5.*",
         "vinkla/translator": "3.*",
-        "mcamara/laravel-localization": "1.2.7",
+        "mcamara/laravel-localization": "1.2.6",
         "cviebrock/eloquent-sluggable": "^3.1",
         "yajra/laravel-datatables-oracle": "~6.0"
     },
