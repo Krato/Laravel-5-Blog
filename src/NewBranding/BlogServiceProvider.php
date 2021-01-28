@@ -54,7 +54,7 @@ class BlogServiceProvider extends ServiceProvider {
 
 	private function registerCommands()
     {
-        $this->app->bindShared('command.newbranding.blog', function ($app) {
+        $this->app->singleton('command.newbranding.blog', function ($app) {
             return new BlogMigrate();
         });
 	}
